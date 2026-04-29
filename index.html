@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>攻城掠地 SLG 活动 · 交互文档 v0.5</title>
+<title>攻城掠地 / 烽火连城 SLG 活动 · 交互文档 v0.6</title>
 <style>
 /* ═══════════════════════════════ 基础重置 ═══════════════════════════════ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -83,11 +83,11 @@ body {
 .title-info-btn:hover { background: #c8a84e; color: #1a0e04; transform: scale(1.1); }
 .activity-subtitle {
   position: absolute;
-  top: 60px;
+  top: 78px;
   left: 0; right: 0;
   text-align: center;
-  font-size: 11px;
-  color: rgba(200,168,78,0.5);
+  font-size: 12px;
+  color: rgba(200,168,78,0.6);
   letter-spacing: 2px;
 }
 
@@ -1000,6 +1000,70 @@ body.phase-preview .main-brief-rules { display: block; }
   font-family: inherit;
 }
 .doc-jump-btn:hover { background: rgba(200,168,78,0.12); }
+
+/* ═══ 时间进度条（手机框下，拖拽切换阶段）═══ */
+.season-scrubber {
+  width: 390px;
+  margin: 12px auto 0;
+  padding: 10px 14px 14px;
+  background: rgba(7,16,29,0.55);
+  border: 1.5px solid rgba(255,156,80,0.55);
+  border-radius: 8px;
+  box-sizing: border-box;
+  user-select: none;
+}
+.ss-track .ss-seg-idle      { background: linear-gradient(180deg, rgba(120,120,120,0.6), rgba(60,60,60,0.65)); border-top-left-radius:14px; border-bottom-left-radius:14px; color:#e0e0e0; }
+.ss-track .ss-seg-gongcheng { background: linear-gradient(180deg, rgba(80,140,90,0.85), rgba(40,90,55,0.85)); }
+.ss-track .ss-seg-dongzhuo  { background: linear-gradient(180deg, rgba(180,40,40,0.95), rgba(90,15,15,0.95)); font-size:9px; }
+.ss-track .ss-seg-fenghuo   { background: linear-gradient(180deg, rgba(255,140,40,0.9), rgba(180,60,10,0.95)); border-top-right-radius:14px; border-bottom-right-radius:14px; }
+
+/* 烽火连城：全局阶段化表现 */
+body.stage-fenghuo .activity-title { color: #ffd070; text-shadow: 0 0 8px rgba(255,140,40,0.85), 0 0 18px rgba(255,80,20,0.5); }
+/* 标题字体加大为原本 2x */
+.activity-title { font-size: 36px !important; line-height: 1.2; }
+body.stage-fenghuo .mm-city {
+  border-color: #5a1208 !important;
+  border-width: 3px !important;
+  width: 30px; height: 30px;
+  font-size: 12.5px;
+  box-shadow: 0 0 10px rgba(255,150,40,0.85), 0 0 20px rgba(255,80,15,0.6), 0 2px 4px rgba(0,0,0,0.5);
+  animation: mm-city-fenghuo-pulse 2.4s ease-in-out infinite;
+}
+body.stage-fenghuo .mm-city::before {
+  content: '🔥';
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  filter: drop-shadow(0 0 4px rgba(255,180,60,0.9));
+  pointer-events: none;
+}
+body.stage-fenghuo .mm-city-label {
+  font-weight: 900;
+  color: #ffeec0;
+  font-family: 'KaiTi','楷体','STKaiti',serif;
+  letter-spacing: 2px;
+  text-shadow:
+    0 0 4px #ff5a14,
+    0 0 8px rgba(255,140,40,1),
+    0 0 14px rgba(255,80,15,0.95),
+    0 1px 2px rgba(0,0,0,0.85);
+}
+body.stage-fenghuo .mm-city-label::before { content: '烽火·'; }
+@keyframes mm-city-fenghuo-pulse {
+  0%,100% { box-shadow: 0 0 10px rgba(255,150,40,0.85), 0 0 20px rgba(255,80,15,0.6), 0 2px 4px rgba(0,0,0,0.5); }
+  50%     { box-shadow: 0 0 14px rgba(255,200,80,1),    0 0 28px rgba(255,120,30,0.85), 0 2px 4px rgba(0,0,0,0.5); }
+}
+/* 未开启：遮挡内容 */
+body.stage-idle .main-stage::after {
+  content: '赛季未开启 · 从第 4 天 20:00 开启《攻城掠地》';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.78);
+  color: #ffd870; font-size: 14px; font-weight: 900; letter-spacing: 2px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  z-index: 50; pointer-events: none;
+}
 
 /* ═══ 时间进度条（手机框下，拖拽切换阶段）═══ */
 .time-scrubber {
@@ -3358,7 +3422,7 @@ body.phase-preview .main-brief-rules { display: block; }
     <div class="bg-particles" id="bg-particles"></div>
 
     <!-- 顶部标题 -->
-    <div class="activity-title">攻城掠地<button class="title-info-btn" onclick="showHelpModal('overview')" title="查看活动说明">i</button></div>
+    <div class="activity-title" id="activity-title"><span id="activity-title-text">攻城掠地</span><button class="title-info-btn" onclick="showHelpModal('overview')" title="查看活动说明">i</button></div>
     <div class="activity-subtitle" id="activity-subtitle">二年·春</div>
 
     <!-- ═══ 阶段视图：准备期 / 战斗中 显示，结算期隐藏 ═══ -->
@@ -3387,7 +3451,7 @@ body.phase-preview .main-brief-rules { display: block; }
         </div>
         <div class="mbr-row">
           <div class="mbr-icon">⚔️</div>
-          <div class="mbr-text"><b>个人拿分</b>：在都城内的杀敌与损兵换算成个人积分，积分越高 → 本场获得的<b>宝箱数量</b>越多</div>
+          <div class="mbr-text"><b>个人拿分</b>：在都城内的杀敌与损兵换算成个人积分，积分高低决定三国名次 → 名次越靠前本场获得的<b>宝箱数量</b>越多</div>
         </div>
       </div>
 
@@ -3495,11 +3559,11 @@ body.phase-preview .main-brief-rules { display: block; }
     <div class="help-modal-overlay" id="help-modal-overlay">
       <div class="info-modal-card">
         <div class="info-modal-header">
-          <div class="info-modal-title">攻城掠地</div>
+          <div class="info-modal-title" id="info-modal-title">攻城掠地</div>
           <div class="info-modal-close" onclick="closeHelpModal()">✕</div>
         </div>
         <div class="info-modal-tabs">
-          <button class="info-modal-tab active" data-info-tab="overview" onclick="switchInfoTab('overview')">攻城掠地</button>
+          <button class="info-modal-tab active" data-info-tab="overview" id="info-tab-btn-overview" onclick="switchInfoTab('overview')">攻城掠地</button>
           <button class="info-modal-tab" data-info-tab="nation" onclick="switchInfoTab('nation')">国家积分</button>
           <button class="info-modal-tab" data-info-tab="personal" onclick="switchInfoTab('personal')">个人积分</button>
         </div>
@@ -3535,14 +3599,14 @@ body.phase-preview .main-brief-rules { display: block; }
                 <div class="info-card-icon">🏰</div>
                 <div>
                   <div class="info-card-name">国家积分 · 决定宝箱品质</div>
-                  <div class="info-card-desc">本国总积分档位 → 宝箱品质（白 / 绿 / 蓝 / 紫 / 橙）。</div>
+                  <div class="info-card-desc">本国总积分档位 → 宝箱品质（木制 / 青铜 / 白银 / 黄金 / 钻石）。</div>
                 </div>
               </div>
               <div class="info-card-row">
                 <div class="info-card-icon">⚔️</div>
                 <div>
                   <div class="info-card-name">个人积分 · 决定宝箱数量</div>
-                  <div class="info-card-desc">个人积分档位 → 宝箱数量。</div>
+                  <div class="info-card-desc">个人积分排名档位 → 宝箱数量。</div>
                 </div>
               </div>
             </div>
@@ -3556,9 +3620,9 @@ body.phase-preview .main-brief-rules { display: block; }
             <p>9 座都城以<b>玩家本国</b>为视角划分为 3 类（同一座都城对 A 国是关内、对 B/C 国是敌境）：</p>
             <table class="info-table">
               <tr><th>类型</th><th>包含都城（魏视角）</th><th>积分</th></tr>
-              <tr><td><b>关内</b></td><td>晋阳、洛阳</td><td>1,000 / 座</td></tr>
-              <tr><td><b>关外</b></td><td>徐州、长安、苍梧</td><td>3,000 / 座</td></tr>
-              <tr><td><b>敌境</b></td><td>南海、建业、永昌、汉中</td><td>8,000 / 座</td></tr>
+              <tr><td><b>关内</b></td><td>晋阳、洛阳</td><td id="info-score-guannei">1,000 / 座</td></tr>
+              <tr><td><b>关外</b></td><td>徐州、长安、苍梧</td><td id="info-score-guanwai">3,000 / 座</td></tr>
+              <tr><td><b>敌境</b></td><td>南海、建业、永昌、汉中</td><td id="info-score-dijing">8,000 / 座</td></tr>
             </table>
             <h4>得分计算</h4>
             <p>战斗时段不计算占领时长，<b>仅以 22:00 结算时刻</b>各城池的归属为准：国家积分 = ∑ <b>本国最终占领的都城积分</b>。</p>
@@ -3578,7 +3642,7 @@ body.phase-preview .main-brief-rules { display: block; }
             </table>
             <p>个人积分 = 击杀得分 + 损兵补偿。</p>
             <h4>奖励档位</h4>
-            <p>按个人积分对应档位决定本场可获得的<b>宝箱数量</b>。</p>
+            <p>按个人积分在<b>全服三国玩家</b>中的<b>名次档位</b>决定本场可获得的<b>宝箱数量</b>，名次越靠前数量越多。</p>
           </div>
         </div>
       </div>
@@ -3622,7 +3686,7 @@ body.phase-preview .main-brief-rules { display: block; }
     <div class="cv-stage">
       <button class="cv-help-btn" onclick="showCvProbModal()" aria-label="奖励概率说明">?</button>
 
-      <div class="cv-stage-name" id="cv-stage-name">蓝钢宝箱</div>
+      <div class="cv-stage-name" id="cv-stage-name">白银宝箱</div>
       <div class="cv-stage-tip" id="cv-stage-tip">每个宝箱必出 4 件奖励，蓝色品质有 18% 概率出招募令</div>
 
       <div class="cv-stage-body">
@@ -3747,7 +3811,7 @@ body.phase-preview .main-brief-rules { display: block; }
           <div class="cv-levelup-chest q-blue" id="cv-levelup-chest">
             <div class="cv-chest-art"></div>
           </div>
-          <div class="cv-levelup-chest-name" id="cv-levelup-chest-name">蓝钢宝箱 ×1</div>
+          <div class="cv-levelup-chest-name" id="cv-levelup-chest-name">白银宝箱 ×1</div>
         </div>
         <button class="cv-levelup-btn" onclick="cvCloseLevelup()">收下</button>
       </div>
@@ -3904,7 +3968,7 @@ body.phase-preview .main-brief-rules { display: block; }
       </div>
       <div class="modal-tabs">
         <div class="modal-tab active" data-tab="personal-rank"    onclick="switchTab('personal','rank')">个人得分排行</div>
-        <div class="modal-tab"        data-tab="personal-rewards" onclick="switchTab('personal','rewards')">宝箱数量区间</div>
+        <div class="modal-tab"        data-tab="personal-rewards" onclick="switchTab('personal','rewards')">名次奖励档位</div>
       </div>
       <div class="modal-body">
 
@@ -4002,41 +4066,83 @@ body.phase-preview .main-brief-rules { display: block; }
           </div>
         </div><!-- /tab-personal-rank -->
 
-        <!-- Tab 2：宝箱数量区间 -->
+        <!-- Tab 2：名次奖励档位 -->
         <div class="tab-pane" id="tab-personal-rewards">
           <div class="reward-row">
-            <div class="reward-range">0<br>~ 5,000</div>
+            <div class="reward-range">第 1 名</div>
             <div class="reward-right">
-              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×1</span>
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×100</span>
               <span style="font-size:12px;color:#888;">宝箱</span>
             </div>
           </div>
           <div class="reward-row">
-            <div class="reward-range">5K<br>~ 15K</div>
+            <div class="reward-range">第 2 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×80</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+            </div>
+          </div>
+          <div class="reward-row">
+            <div class="reward-range">第 3 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×60</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+            </div>
+          </div>
+          <div class="reward-row">
+            <div class="reward-range">第 4–5 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×40</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+            </div>
+          </div>
+          <div class="reward-row">
+            <div class="reward-range">第 6–10 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×25</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+            </div>
+          </div>
+          <div class="reward-row current-tier">
+            <div class="reward-range">第 11–20 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#2d9a5a;">×15</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+              <span class="tier-suffix">← 当前档位</span>
+            </div>
+          </div>
+          <div class="reward-row">
+            <div class="reward-range">第 21–50 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×8</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+            </div>
+          </div>
+          <div class="reward-row">
+            <div class="reward-range">第 51–100 名</div>
+            <div class="reward-right">
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×5</span>
+              <span style="font-size:12px;color:#888;">宝箱</span>
+            </div>
+          </div>
+          <div class="reward-row">
+            <div class="reward-range">第 101–200 名</div>
             <div class="reward-right">
               <span style="font-size:16px;font-weight:bold;color:#5a3800;">×3</span>
               <span style="font-size:12px;color:#888;">宝箱</span>
             </div>
           </div>
           <div class="reward-row">
-            <div class="reward-range">15K<br>~ 30K</div>
+            <div class="reward-range">第 201–500 名</div>
             <div class="reward-right">
-              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×5</span>
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×2</span>
               <span style="font-size:12px;color:#888;">宝箱</span>
-            </div>
-          </div>
-          <div class="reward-row current-tier">
-            <div class="reward-range">30K<br>~ 50K</div>
-            <div class="reward-right">
-              <span style="font-size:16px;font-weight:bold;color:#2d9a5a;">×10</span>
-              <span style="font-size:12px;color:#888;">宝箱</span>
-              <span class="tier-suffix">← 当前档位</span>
             </div>
           </div>
           <div class="reward-row">
-            <div class="reward-range">50K<br>以上</div>
+            <div class="reward-range">第 501–1000 名</div>
             <div class="reward-right">
-              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×20</span>
+              <span style="font-size:16px;font-weight:bold;color:#5a3800;">×1</span>
               <span style="font-size:12px;color:#888;">宝箱</span>
             </div>
           </div>
@@ -4059,8 +4165,8 @@ body.phase-preview .main-brief-rules { display: block; }
       <div class="selfbar-pane" id="selfbar-personal-rewards">
         <div class="selfbar-rank-item">
           <div class="rank-info">
-            <div class="rank-name">当前档位：×10 宝箱</div>
-            <div class="rank-score">我的积分 38,100 · 30K~50K 区间</div>
+            <div class="rank-name">当前档位：×15 宝箱</div>
+            <div class="rank-score">我的名次 第 12 名 · 第 11–20 名 区间</div>
           </div>
         </div>
       </div>
@@ -4091,6 +4197,24 @@ body.phase-preview .main-brief-rules { display: block; }
   </div>
 
   </div><!-- /game-container -->
+
+  <!-- 赛季拖拽条：30 天赛季，拖动选择天数（驱动阶段 idle/gongcheng/dongzhuo/fenghuo） -->
+  <div class="season-scrubber" id="season-scrubber">
+    <div class="ts-head">
+      <span class="ts-head-title">🗓 拖动赛季轴预览各阶段（赛季共 30 天）</span>
+      <span class="ts-head-time" id="ss-head-day">第 1 天</span>
+    </div>
+    <div class="ts-track ss-track" id="ss-track">
+      <div class="ts-seg ss-seg-idle"      style="left:0%;            width:10%;">未开启</div>
+      <div class="ts-seg ss-seg-gongcheng" style="left:10%;           width:33.33%;">攻城掠地 (4-13)</div>
+      <div class="ts-seg ss-seg-fenghuo"   style="left:43.33%;        width:56.67%;">烽火连城 (14-30)</div>
+      <div class="ts-tick" style="left:0%;"><span>D1</span></div>
+      <div class="ts-tick" style="left:10%;"><span>D4</span></div>
+      <div class="ts-tick" style="left:43.33%;"><span>D14</span></div>
+      <div class="ts-tick" style="left:100%;"><span>D30</span></div>
+      <div class="ts-thumb" id="ss-thumb" style="left:0%;"></div>
+    </div>
+  </div>
 
   <!-- 时间进度条：04:00 起跨日，按阶段三等分（准备 / 战斗 / 领奖） -->
   <div class="time-scrubber" id="time-scrubber">
@@ -4140,7 +4264,7 @@ body.phase-preview .main-brief-rules { display: block; }
   <div class="doc-nav">
     <!-- 顶行：大标题 + 阶段切换 + 参考截图按钮 -->
     <div class="doc-nav-top">
-      <div class="doc-nav-title">攻城掠地 SLG 活动</div>
+      <div class="doc-nav-title">攻城掠地 / 烽火连城 SLG 活动</div>
       <!-- 阶段切换已移至游戏界面底部 -->
       <!-- 参考截图按钮，在新标签页打开 -->
       <a href="references.html" target="_blank" class="doc-ref-btn">📷 参考截图</a>
@@ -4149,15 +4273,21 @@ body.phase-preview .main-brief-rules { display: block; }
   <div class="doc-body" id="doc-body">
 
     <!-- 标题区 -->
-    <div class="doc-h1">攻城掠地 SLG 活动</div>
-    <div class="doc-subtitle">版本 0.5 &nbsp;·&nbsp; 2026-04-29 &nbsp;·&nbsp; 3 阶段生命周期 · 国家积分 + 个人积分</div>
+    <div class="doc-h1">攻城掠地 / 烽火连城 SLG 活动</div>
+    <div class="doc-subtitle">版本 0.6 &nbsp;·&nbsp; 2026-04-29 &nbsp;·&nbsp; 30 天赛季双阶段（攻城掠地 + 烽火连城） · 3 阶段日常生命周期 · 国家积分 + 个人积分</div>
     <hr class="doc-divider-title">
 
     <!-- ─── 章节一：系统概述 ─── -->
     <a class="doc-anchor" id="doc-overview"></a>
     <div class="doc-h2"><span><span class="doc-section-num">一</span>系统概述</span></div>
 
-    <p class="doc-p">攻城掠地是国战地图活动中的<span class="doc-hl">阶段结算奖励载体</span>。每日活动划分为 3 个阶段，活动主界面随阶段切换形态：</p>
+    <p class="doc-p">本系统是国战地图活动中的<span class="doc-hl">阶段结算奖励载体</span>，按 <b>30 天为一个赛季</b>组织（一年四季 · 每天对应一个季节，赛季首日为 <b>1 年·春</b>，每 4 天进入下一年）。一个赛季包含两个连续阶段：</p>
+    <ul class="doc-ul">
+      <li><span class="doc-hl">D1–D3 赛季预热</span>：活动尚未开启，主界面展示赛季倒计时与战场地图预览</li>
+      <li><span class="doc-hl">D4–D13 攻城掠地</span>：常规阶段，三国围绕 9 座都城展开 10 天的争夺战</li>
+      <li><span class="doc-hl">D14–D30 烽火连城</span>：进入赛季高潮阶段，地图迎来「烽火都城」<b>国家积分整体翻 3 倍</b>，城池视觉以烽火主题强化（金色楷体城名 + 火焰动效）</li>
+    </ul>
+    <p class="doc-p">每个活动日（D4 起）内部又划分为 3 个时段，活动主界面随时段切换形态：</p>
     <ul class="doc-ul">
       <li><span class="doc-hl">准备期（04:00–20:00）</span>：展示战场地图 + 玩法简介，供玩家预览局势与了解规则</li>
       <li><span class="doc-hl">战斗期（20:00–22:00）</span>：玩家围绕 9 个都城展开攻防；主界面同步展示实时地图 + 国家/个人积分</li>
@@ -4165,7 +4295,7 @@ body.phase-preview .main-brief-rules { display: block; }
     </ul>
     <p class="doc-p">阶段结束（22:00）时系统按以下两个维度为玩家分配宝箱：</p>
     <ul class="doc-ul">
-      <li><span class="doc-hl">国家总体得分</span> —— 决定宝箱<span class="doc-hl">品质</span>（白 / 绿 / 蓝 / 紫 / 橙，共五档）</li>
+      <li><span class="doc-hl">国家总体得分</span> —— 决定宝箱<span class="doc-hl">品质</span>（木制 / 青铜 / 白银 / 黄金 / 钻石，共五档）</li>
       <li><span class="doc-hl">玩家个人得分</span> —— 决定宝箱<span class="doc-hl">数量</span>（由数值配置定义，最高三位数）</li>
     </ul>
     <p class="doc-p">宝箱领取后进入独立的<span class="doc-hl">宝箱界面</span>，玩家可延迟开启，无强制时限。</p>
@@ -4217,9 +4347,9 @@ body.phase-preview .main-brief-rules { display: block; }
     <table class="doc-table">
       <thead><tr><th>类型</th><th>含义</th><th>包含都城（魏视角举例）</th><th>积分（演示）</th></tr></thead>
       <tbody>
-        <tr><td><b>关内</b></td><td>本国本土都城，最好守</td><td>晋阳、洛阳（本国 2 座）</td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">1,000 / 座</span></td></tr>
-        <tr><td><b>关外</b></td><td>三国交界中立都城，争夺热点</td><td>徐州、长安、苍梧（3 座三国同为“关外”）</td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">3,000 / 座</span></td></tr>
-        <tr><td><b>敌境</b></td><td>另两国本土都城，远攻加分</td><td>南海、建业（吴本土）、永昌、汉中（蜀本土）</td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">8,000 / 座</span></td></tr>
+        <tr><td><b>关内</b></td><td>本国本土都城，最好守</td><td>晋阳、洛阳（本国 2 座）</td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">1,000 / 座</span><br><span style="color:#c0392b;font-size:11px;">烽火期 ×3 = 3,000 / 座</span></td></tr>
+        <tr><td><b>关外</b></td><td>三国交界中立都城，争夺热点</td><td>徐州、长安、苍梧（3 座三国同为“关外”）</td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">3,000 / 座</span><br><span style="color:#c0392b;font-size:11px;">烽火期 ×3 = 9,000 / 座</span></td></tr>
+        <tr><td><b>敌境</b></td><td>另两国本土都城，远攻加分</td><td>南海、建业（吴本土）、永昌、汉中（蜀本土）</td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">8,000 / 座</span><br><span style="color:#c0392b;font-size:11px;">烽火期 ×3 = 24,000 / 座</span></td></tr>
       </tbody>
     </table>
     <div class="doc-note blue">⚠ <b>分类以玩家的本国为参照</b>：同一座都城对 A 国是<b>关内</b>，对 B 与 C 国则是<b>敌境</b>。例：“南海 / 建业”是吴国的关内，对魏、蜀是敌境；“永昌 / 汉中”是蜀国的关内，对魏、吴是敌境。三国玩家看到的“关内 / 敌境名单”各不相同，但关外都城（徐州 / 长安 / 苍梧）三国一致。</div>
@@ -4243,8 +4373,8 @@ body.phase-preview .main-brief-rules { display: block; }
     <table class="doc-table">
       <thead><tr><th>积分维度</th><th>决定的奖励维度</th><th>规则说明</th></tr></thead>
       <tbody>
-        <tr><td><b>国家积分</b></td><td><span class="doc-hl">宝箱品质</span>（白 / 绿 / 蓝 / 紫 / 橙 五档）</td><td>结算时按国家积分所达阈值档位决定本国玩家本场可获得的宝箱品质，国家积分越高品质越高</td></tr>
-        <tr><td><b>个人积分</b></td><td><span class="doc-hl">宝箱数量</span>（最高三位数）</td><td>结算时按个人积分所达阈值档位决定本场可获得的宝箱数量，个人积分越高数量越多</td></tr>
+        <tr><td><b>国家积分</b></td><td><span class="doc-hl">宝箱品质</span>（木制 / 青铜 / 白银 / 黄金 / 钻石 五档）</td><td>结算时按国家积分所达阈值档位决定本国玩家本场可获得的宝箱品质，国家积分越高品质越高</td></tr>
+        <tr><td><b>个人积分</b></td><td><span class="doc-hl">宝箱数量</span>（最高三位数）</td><td>个人积分仅用于<b>在三国玩家中排名次</b>；结算时按名次所在档位决定本场可获得的宝箱数量，名次越靠前数量越多</td></tr>
       </tbody>
     </table>
 
@@ -4252,29 +4382,33 @@ body.phase-preview .main-brief-rules { display: block; }
     <table class="doc-table">
       <thead><tr><th>品质</th><th>国家积分阈值（演示）</th></tr></thead>
       <tbody>
-        <tr><td><span class="doc-tag q-white">白</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 1,000</span></td></tr>
-        <tr><td><span class="doc-tag q-green">绿</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 5,000</span></td></tr>
-        <tr><td><span class="doc-tag q-blue">蓝</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 15,000</span></td></tr>
-        <tr><td><span class="doc-tag q-purple">紫</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 30,000</span></td></tr>
-        <tr><td><span class="doc-tag q-orange">橙</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 60,000</span></td></tr>
+        <tr><td><span class="doc-tag q-white">木制</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 1,000</span></td></tr>
+        <tr><td><span class="doc-tag q-green">青铜</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 5,000</span></td></tr>
+        <tr><td><span class="doc-tag q-blue">白银</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 15,000</span></td></tr>
+        <tr><td><span class="doc-tag q-purple">黄金</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 30,000</span></td></tr>
+        <tr><td><span class="doc-tag q-orange">钻石</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 60,000</span></td></tr>
       </tbody>
     </table>
 
-    <div class="doc-h4-sub" style="margin:10px 0 4px;font-weight:bold;color:#5a3800;">个人积分 → 宝箱数量（演示档位）</div>
+    <div class="doc-h4-sub" style="margin:10px 0 4px;font-weight:bold;color:#5a3800;">个人名次 → 宝箱数量（演示档位）</div>
+    <p class="doc-p">名次按个人积分在<b>全服三国玩家</b>中排序得出（同分按达到分数的先后顺序决定名次），本场未达到最低档位者不获得个人宝箱。</p>
     <table class="doc-table">
-      <thead><tr><th>个人积分阈值（演示）</th><th>宝箱数量（演示）</th></tr></thead>
+      <thead><tr><th>个人名次档位</th><th>宝箱数量（演示）</th></tr></thead>
       <tbody>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">&lt; 2,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×1</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">2,000 ~ 5,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×2</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">5,000 ~ 10,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×5</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">10,000 ~ 20,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×10</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">20,000 ~ 35,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×20</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">35,000 ~ 50,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×35</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">50,000 ~ 80,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×50</span></td></tr>
-        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">≥ 80,000</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×80</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 1 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×100</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 2 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×80</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 3 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×60</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 4 – 5 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×40</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 6 – 10 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×25</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 11 – 20 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×15</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 21 – 50 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×8</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 51 – 100 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×5</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 101 – 200 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×3</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 201 – 500 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×2</span></td></tr>
+        <tr><td><span class="doc-tentative" title="演示值，最终以数值配置为准">第 501 – 1000 名</span></td><td><span class="doc-tentative" title="演示值，最终以数值配置为准">×1</span></td></tr>
       </tbody>
     </table>
-    <p class="doc-p">最终奖励即"<b>国家档位 × 个人档位</b>"的笛卡尔组合，例如国家拿到橙色品质 + 个人达到 ×10 档 → 获得 10 个橙色宝箱。</p>
+    <p class="doc-p">最终奖励即“<b>国家档位×个人档位</b>”的笛卡尔组合，例如国家拿到橙色品质 + 个人排到第 11–20 名（×15 档） → 获得 15 个橙色宝箱。</p>
 
     <hr class="doc-divider">
 
@@ -4313,7 +4447,7 @@ body.phase-preview .main-brief-rules { display: block; }
     <ul class="doc-ul">
       <li><span class="doc-hl">战场地图（实时）</span>：展示 9 座都城的<b>实时占领归属</b>，<b>正在交战的城池高亮闪烁</b>；同样可点击进入 SLG 大地图</li>
       <li><span class="doc-hl">国家积分卡（上）</span>：卡片水平拆分为左右两区。<b>左区（国家积分）</b>右上角显示总分，主体列出三类都城（内城 / 外城 / 远城）与本国占领情况，已占领的都城名绿色加“✓”高亮，并列出该类合计分；<b>右区（国家奖励）</b>以宝箱图标预览当前积分对应的<b>宝箱品质</b>（如“蓝色宝箱”）。点击卡片任意区域打开国家积分排行弹窗</li>
-      <li><span class="doc-hl">个人积分卡（下）</span>：同样左右两区。<b>左区（个人积分）</b>右上角总分，主体两行公式：“击杀 28,400 × 1.0 = 28,400” / “损兵 32,333 × 0.3 = 9,700”；<b>右区（个人奖励）</b>以大号数字预览当前积分对应的<b>宝箱数量</b>（如 ×10）。点击卡片打开个人积分排行弹窗</li>
+      <li><span class="doc-hl">个人积分卡（下）</span>：同样左右两区。<b>左区（个人积分）</b>右上角总分，主体两行公式：“击杀 28,400 × 1.0 = 28,400” / “损兵 32,333 × 0.3 = 9,700”；<b>右区（个人奖励）</b>以大号数字预览当前积分对应<b>名次档位</b>所获得的<b>宝箱数量</b>（如第 11–20 名 → ×15）。点击卡片打开个人积分排行弹窗</li>
       <li>本国诶后看到的“关内 / 关外 / 敌境”名单不同，参见 2.3 节说明</li>
       <li>不显示宝箱（尚未结算）</li>
     </ul>
@@ -4377,9 +4511,9 @@ body.phase-preview .main-brief-rules { display: block; }
     <div class="doc-note amber">⚠ 本节中所有<u style="text-decoration-style:dashed;">带橙色虚线下划线</u>的数值（积分掉落、每级所需积分、等级与品质对照、赛季上限等）均为<b>演示用占位值</b>，仅用于帮助理解规则；<b>最终数值以数值策划配置表为准</b>。</div>
     <p class="doc-p">玩家在宝箱仓库内开启宝箱时，按品质获得<span class="doc-hl">对应积分</span>；积分填满进度后<span class="doc-hl">提升宝箱等级</span>，并赠送一个<span class="doc-hl">免费宝箱</span>，宝箱品质与升级后的等级关联。</p>
     <ul class="doc-ul">
-      <li><span class="doc-hl">积分获取</span>：每次开启宝箱按其品质获得积分，<b>品质越高积分越多</b>。演示值：白铁 <span class="doc-tentative" title="演示值，最终以数值配置为准">+5</span> / 青铜 <span class="doc-tentative" title="演示值，最终以数值配置为准">+10</span> / 蓝钢 <span class="doc-tentative" title="演示值，最终以数值配置为准">+20</span> / 秘银 <span class="doc-tentative" title="演示值，最终以数值配置为准">+40</span> / 赤金 <span class="doc-tentative" title="演示值，最终以数值配置为准">+80</span>（每开 1 个）</li>
+      <li><span class="doc-hl">积分获取</span>：每次开启宝箱按其品质获得积分，<b>品质越高积分越多</b>。演示值：木制 <span class="doc-tentative" title="演示值，最终以数值配置为准">+5</span> / 青铜 <span class="doc-tentative" title="演示值，最终以数值配置为准">+10</span> / 白银 <span class="doc-tentative" title="演示值，最终以数值配置为准">+20</span> / 黄金 <span class="doc-tentative" title="演示值，最终以数值配置为准">+40</span> / 钻石 <span class="doc-tentative" title="演示值，最终以数值配置为准">+80</span>（每开 1 个）</li>
       <li><span class="doc-hl">升级触发</span>：积分填满当前等级进度后即提升一级，进度归零，<b>溢出积分自动转入下一级</b>。演示值：升级所需 <span class="doc-tentative" title="演示值，最终以数值配置为准">100</span> 积分 / 级</li>
-      <li><span class="doc-hl">免费宝箱奖励</span>：每次升级赠送一个免费宝箱，宝箱品质<b>与升级后的等级档位绑定</b>。演示对照：<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 1-2 → 白铁</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 3-4 → 青铜</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 5-6 → 蓝钢</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 7-8 → 秘银</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 9+ → 赤金</span></li>
+      <li><span class="doc-hl">免费宝箱奖励</span>：每次升级赠送一个免费宝箱，宝箱品质<b>与升级后的等级档位绑定</b>。演示对照：<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 1-2 → 木制</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 3-4 → 青铜</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 5-6 → 白银</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 7-8 → 黄金</span>，<span class="doc-tentative" title="演示值，最终以数值配置为准">Lv 9+ → 钻石</span></li>
       <li><span class="doc-hl">赛季等级上限</span>：每个赛季存在等级上限，本赛季最多升至该上限；新赛季开放更高的等级上限。演示值：<span class="doc-tentative" title="演示值，最终以数值配置为准">S1 上限 Lv 8</span></li>
       <li><span class="doc-hl">满级仍可累积</span>：达到本赛季等级上限后，开箱积分仍正常累计，进度满时不再升级，但<b>仍发放对应等级的"满级奖励宝箱"</b></li>
       <li><span class="doc-hl">奖励领取方式</span>：升级 / 满级奖励均通过<span class="doc-hl">领取奖励按钮</span> 触发，弹出升级结算层（金色光环 + 宝箱图 + "收下"），收下后宝箱入库；按钮在无奖励时仍可点击，会提示"开启宝箱以获得额外奖励"</li>
@@ -4546,8 +4680,8 @@ function createEmptyInventory() {
 
 var CHEST_META = {
   white: {
-    title: '白铁宝箱',
-    shortTitle: '白铁',
+    title: '木制宝箱',
+    shortTitle: '木制',
     kicker: '基础补给',
     desc: '稳定产出粮草、玄铁与低阶将魂，适合前期和日常补给。',
     openHint: '基础宝箱，适合快速补足日常资源。'
@@ -4560,25 +4694,25 @@ var CHEST_META = {
     openHint: '青铜宝箱开启中，将掉落更完整的培养资源。'
   },
   blue: {
-    title: '蓝钢宝箱',
-    shortTitle: '蓝钢',
+    title: '白银宝箱',
+    shortTitle: '白银',
     kicker: '阶段主奖',
     desc: '兼顾资源与招募道具，是当前阶段结算最常见的核心奖励。',
-    openHint: '蓝钢宝箱开启中，奖励会直接进入背包。'
+    openHint: '白银宝箱开启中，奖励会直接进入背包。'
   },
   purple: {
-    title: '秘银宝箱',
-    shortTitle: '秘银',
+    title: '黄金宝箱',
+    shortTitle: '黄金',
     kicker: '高阶掉落',
     desc: '可稳定产出更高质量的将魂与强化材料，适合集中开启。',
-    openHint: '秘银宝箱开启中，高阶奖励概率显著提升。'
+    openHint: '黄金宝箱开启中，高阶奖励概率显著提升。'
   },
   orange: {
-    title: '赤金宝箱',
-    shortTitle: '赤金',
+    title: '钻石宝箱',
+    shortTitle: '钻石',
     kicker: '顶级珍藏',
     desc: '最高品质宝箱，适合集中展示稀有掉落与大批量收益。',
-    openHint: '赤金宝箱开启中，必有高阶奖励出现。'
+    openHint: '钻石宝箱开启中，必有高阶奖励出现。'
   }
 };
 
@@ -5303,6 +5437,10 @@ function renderMainMap(phase) {
   if (!stage) return;
   var occ = (phase === 'battle') ? BATTLE_OCCUPATION : PREVIEW_OCCUPATION;
   var flicker = (phase === 'battle') ? BATTLE_FLICKER_IDX : [];
+  var isFenghuo = (typeof seasonState !== 'undefined' && seasonState.stage === 'fenghuo');
+  // 主屏地图标题随阶段切换
+  var title = document.getElementById('main-map-title');
+  if (title) title.textContent = isFenghuo ? '烽火战场 · 9 座烽火都城' : '战场地图 · 9 座都城';
   stage.innerHTML = '';
   MAIN_MAP_CITIES.forEach(function(c, i) {
     var el = document.createElement('span');
@@ -5311,11 +5449,11 @@ function renderMainMap(phase) {
     el.style.left = c.left + '%';
     el.style.top  = c.top  + '%';
     el.textContent = c.short;
-    el.title = '点击进入 SLG 大地图 · ' + c.name;
+    el.title = (isFenghuo ? '烽火都城 · ' : '点击进入 SLG 大地图 · ') + c.name + (isFenghuo ? '（积分 ×3）' : '');
     el.addEventListener('click', function(ev) {
       ev.stopPropagation();
       if (typeof showToast === 'function') {
-        showToast('跳转至 SLG 大地图 · ' + c.name);
+        showToast((isFenghuo ? '跳转至 SLG 大地图 · 烽火都城 · ' : '跳转至 SLG 大地图 · ') + c.name);
       }
     });
     var lab = document.createElement('span');
@@ -5354,10 +5492,13 @@ function renderRewardCards() {
   // 魏视角：关内 = 晋阳/洛阳（1000/座）；关外 = 徐州/长安/苍梧（3000/座）；敌境 = 南海/建业/永昌/汉中（8000/座）
   // 战斗期（BATTLE_OCCUPATION wei 位）= [晋阳,洛阳,徐州,长安] → 关内 2 × 1000 + 关外 2 × 3000 = 8000
   // 领奖期（演示最终）= [晋阳,洛阳,徐州,长安,汉中] → 关内 2 + 关外 2 + 敌境 1 = 2000+6000+8000 = 16000
+  // 烽火期：国家积分 3×（各都城得分提升，可达到之前达不到的阶位）
+  var fenghuo = (typeof seasonState !== 'undefined' && seasonState.stage === 'fenghuo');
+  var fhMul = fenghuo ? 3 : 1;
   var nationGroups = [
-    { type: '关内', perScore: 1000, cities: ['晋阳','洛阳'] },
-    { type: '关外', perScore: 3000, cities: ['徐州','长安','苍梧'] },
-    { type: '敌境', perScore: 8000, cities: ['南海','建业','永昌','汉中'] }
+    { type: '关内', perScore: 1000 * fhMul, cities: ['晋阳','洛阳'] },
+    { type: '关外', perScore: 3000 * fhMul, cities: ['徐州','长安','苍梧'] },
+    { type: '敌境', perScore: 8000 * fhMul, cities: ['南海','建业','永昌','汉中'] }
   ];
   var ownedSet = (demoState.phase === 'settlement')
     ? { '晋阳':1, '洛阳':1, '徐州':1, '长安':1, '汉中':1 }
@@ -5607,8 +5748,28 @@ function reopenSelectedChest() {
 }
 
 /* ─── 帮助弹窗 ─── */
+function refreshHelpModalForStage() {
+  var isFh = (typeof seasonState !== 'undefined' && seasonState.stage === 'fenghuo');
+  var titleEl = document.getElementById('info-modal-title');
+  var tabBtn  = document.getElementById('info-tab-btn-overview');
+  var label   = isFh ? '烽火连城' : '攻城掠地';
+  if (titleEl) titleEl.textContent = label;
+  if (tabBtn)  tabBtn.textContent  = label;
+  var mul = isFh ? 3 : 1;
+  var fmt = function(n){ return n.toLocaleString('en-US') + ' / 座'; };
+  var a = document.getElementById('info-score-guannei');
+  var b = document.getElementById('info-score-guanwai');
+  var c = document.getElementById('info-score-dijing');
+  if (a) a.textContent = fmt(1000 * mul);
+  if (b) b.textContent = fmt(3000 * mul);
+  if (c) c.textContent = fmt(8000 * mul);
+  var note = document.getElementById('info-fenghuo-note');
+  if (note) note.style.display = isFh ? '' : 'none';
+}
+
 function showHelpModal(tab) {
   if (refs.helpModalOverlay) refs.helpModalOverlay.classList.add('active');
+  refreshHelpModalForStage();
   switchInfoTab(tab || 'overview');
   setActiveSceneChip('help-' + (tab || 'overview'));
 }
@@ -6266,6 +6427,112 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initTimeScrubber);
 } else {
   initTimeScrubber();
+}
+
+/* —— 赛季拖拽条：30 天 · 阶段映射（idle / gongcheng / dongzhuo / fenghuo） —— */
+var seasonState = { day: 1, stage: 'idle' };
+function dayToStage(d) {
+  if (d <= 3) return 'idle';
+  if (d <= 13) return 'gongcheng';
+  return 'fenghuo'; // D14 起（董卓之乱当日同时开启烽火连城）
+}
+function stageMeta(stage) {
+  return ({
+    idle:      { title: '攻城掠地', cls: 'stage-idle' },
+    gongcheng: { title: '攻城掠地', cls: 'stage-gongcheng' },
+    fenghuo:   { title: '烽火连城', cls: 'stage-fenghuo' }
+  })[stage] || { title: '攻城掠地', cls: 'stage-gongcheng' };
+}
+// 服务器映射：第几天 → X年·春/夏/秋/冬（每天一个季节，4 天一年）
+var SEASON_NAMES = ['春','夏','秋','冬'];
+function dayToYearSeason(d) {
+  var year = Math.floor((d - 1) / 4) + 1;
+  var idx = (d - 1) % 4;
+  return year + '年·' + SEASON_NAMES[idx];
+}
+function setSeasonDay(day) {
+  day = Math.max(1, Math.min(30, Math.round(day)));
+  seasonState.day = day;
+  var newStage = dayToStage(day);
+  seasonState.stage = newStage;
+  var meta = stageMeta(newStage);
+  // 更新 body 阶段类
+  ['stage-idle','stage-gongcheng','stage-fenghuo'].forEach(function(c) {
+    document.body.classList.remove(c);
+  });
+  document.body.classList.add(meta.cls);
+  // 标题文案
+  var titleEl = document.getElementById('activity-title-text');
+  if (titleEl) titleEl.textContent = meta.title;
+  // 副标题：服务器年季 + 阶段名
+  var sub = document.getElementById('activity-subtitle');
+  if (sub) {
+    sub.textContent = dayToYearSeason(day) + ' · ' + meta.title;
+  }
+  // 主屏地图（烽火期重渲染显示烽火都城样式）
+  if (typeof renderMainMap === 'function' && typeof demoState !== 'undefined') {
+    renderMainMap(demoState.phase);
+  }
+  // 头部天数标签
+  var ssDay = document.getElementById('ss-head-day');
+  if (ssDay) ssDay.textContent = '第 ' + day + ' 天 · ' + meta.title;
+  // 重渲染奖励卡（烽火期国家积分会应用 3×）
+  if (typeof renderRewardCards === 'function') {
+    try { renderRewardCards(); } catch (e) {}
+  }
+  // 同步刷新帮助弹窗（如已打开）
+  if (typeof refreshHelpModalForStage === 'function') {
+    try { refreshHelpModalForStage(); } catch (e) {}
+  }
+}
+function initSeasonScrubber() {
+  var track = document.getElementById('ss-track');
+  var thumb = document.getElementById('ss-thumb');
+  if (!track || !thumb) return;
+  function ratioToDay(r) {
+    return Math.max(1, Math.min(30, Math.round(1 + r * 29)));
+  }
+  function dayToRatio(d) { return (d - 1) / 29; }
+  function pointerToRatio(clientX) {
+    var rect = track.getBoundingClientRect();
+    var r = (clientX - rect.left) / rect.width;
+    if (r < 0) r = 0; if (r > 1) r = 1;
+    return r;
+  }
+  function applyClient(x) {
+    var d = ratioToDay(pointerToRatio(x));
+    thumb.style.left = (dayToRatio(d) * 100) + '%';
+    setSeasonDay(d);
+  }
+  var dragging = false;
+  function onDown(e) {
+    dragging = true;
+    var x = e.touches ? e.touches[0].clientX : e.clientX;
+    applyClient(x);
+    e.preventDefault();
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    var x = e.touches ? e.touches[0].clientX : e.clientX;
+    applyClient(x);
+  }
+  function onUp() { dragging = false; }
+  track.addEventListener('mousedown', onDown);
+  thumb.addEventListener('mousedown', onDown);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  track.addEventListener('touchstart', onDown, { passive: false });
+  document.addEventListener('touchmove', onMove, { passive: false });
+  document.addEventListener('touchend', onUp);
+  // 默认置于第 4 天（攻城掠地首日），便于直接预览主活动
+  var defaultDay = 4;
+  thumb.style.left = (dayToRatio(defaultDay) * 100) + '%';
+  setSeasonDay(defaultDay);
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSeasonScrubber);
+} else {
+  initSeasonScrubber();
 }
 
 /* —— 演示用 overlay 触发 —— */
